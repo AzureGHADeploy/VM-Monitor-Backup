@@ -13,7 +13,7 @@ param adminPassword string
 
 
 
-resource virtualmachine 'Microsoft.Compute/virtualMachines@2021-07-01' = {
+resource virtualmachine 'Microsoft.Compute/virtualMachines@2024-07-01' = {
   name: vmName
   location: location
   properties: {
@@ -46,7 +46,7 @@ resource virtualmachine 'Microsoft.Compute/virtualMachines@2021-07-01' = {
   }
 }
 
-resource networkInterface 'Microsoft.Network/networkInterfaces@2021-02-01' = {
+resource networkInterface 'Microsoft.Network/networkInterfaces@2024-07-01' = {
   name: nicName
   location: location
   properties: {
@@ -73,15 +73,17 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
         '10.0.0.0/16'
       ]
     }
+    subnets: [
+      {
+        name: subnetName
+        properties: {
+          addressPrefix: '10.0.0.0/24'
+        }
+      }
+    ]
   }
 }
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' = {
-  name: subnetName
-  parent: virtualNetwork
-  properties: {
-    addressPrefix: '10.0.0.0/24'
-  }
-}
+
 
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
   name: '${vmName}-pip'
