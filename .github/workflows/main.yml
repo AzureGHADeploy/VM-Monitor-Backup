@@ -14,6 +14,18 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - name: Retrieve secret from Key Vault
+      id: keyvault   
+      uses: azure/CLI@v1
+      with:
+          inlineScript: |
+            ADMIN_PASSWORD=$(az keyvault secret show --name VMPass --vault-name vmpasskeyvault951753 --query value -o tsv)
+            echo "::add-mask::$ADMIN_PASSWORD"
+            echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> $GITHUB_OUTPUTS
+
+    - name: Use retrieved secret
+      run: echo "The secret is successfully retrieved!"
+        
     - name: Deploy ARM Template
       uses: azure/arm-deploy@v1
       with:
@@ -22,4 +34,4 @@ jobs:
         deploymentName: VM-Mntr-Bckp-${{ github.run_number }} 
         deploymentMode: Incremental
         parameters: |
-          adminPassword=${{ secrets.ADMIN_PASSWORD }}
+          adminPassword=${{ steps.keyvault.outputs.ADMIN_PASSWORD }}
