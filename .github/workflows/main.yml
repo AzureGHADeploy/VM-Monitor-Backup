@@ -1,0 +1,23 @@
+on: [push]
+
+name: AzureARMDeploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy ARM Template
+      uses: azure/arm-deploy@v1
+      with:
+        resourceGroupName: VM-Mntr-Bckp
+        template: ./main.bicep # Path to your Bicep file
+        deploymentName: VM-Mntr-Bckp-${{ github.run_number }} 
+        deploymentMode: Incremental
