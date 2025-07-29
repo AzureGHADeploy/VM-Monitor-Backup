@@ -4,14 +4,16 @@ param vmName string = 'TestVM'
 param nicName string = 'TestVMNIC'
 param vnetName string = 'TestVMVNet'
 param subnetName string = 'TestVMSubnet'
-param vmSize string = 'Standard_DS1_v2'
+param publicIPName string = 'TestVMPIP'
+
+param vmSize string = 'Standard_D2s_v3'
 
 param adminUsername string = 'azureuser'
 @secure()
 param adminPassword string
 
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetName
   location: location
   properties: {
@@ -32,8 +34,8 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
 }
 
 
-resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2021-02-01' = {
-  name: '${vmName}-pip'
+resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
+  name: publicIPName
   location: location
   properties: {
     publicIPAllocationMethod: 'Static'
