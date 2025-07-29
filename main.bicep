@@ -39,7 +39,7 @@ resource virtualmachine 'Microsoft.Compute/virtualMachines@2024-07-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: resourceId('Microsoft.Network/networkInterfaces', nicName)
+          id: networkInterface.id
         }
       ]
     }
@@ -55,8 +55,11 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2024-07-01' = {
         name: 'ipconfig1'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
+          publicIPAddress: {
+            id: publicIPAddress.id
+          }
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, subnetName)
+            id: subnet.id
           }
         }
       }
@@ -82,6 +85,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       }
     ]
   }
+}
+
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-02-01' existing = {
+  name: subnetName
+  parent: virtualNetwork
 }
 
 
