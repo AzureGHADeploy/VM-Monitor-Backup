@@ -27,6 +27,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
         name: subnetName
         properties: {
           addressPrefix: '10.0.0.0/24'
+          networkSecurityGroup: {
+            id: nsg.id
+          }
         }
       }
     ]
@@ -99,5 +102,27 @@ resource virtualmachine 'Microsoft.Compute/virtualMachines@2024-07-01' = {
         }
       ]
     }
+  }
+}
+
+resource nsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
+  name: '${vmName}-nsg'
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'AllowSSH'
+        properties: {
+          priority: 1000
+          protocol: 'Tcp'
+          access: 'Allow'
+          direction: 'Inbound'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '22'
+        }
+      }
+    ]
   }
 }
