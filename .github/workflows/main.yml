@@ -21,7 +21,7 @@ jobs:
           inlineScript: |
             ADMIN_PASSWORD=$(az keyvault secret show --name VMPass --vault-name vmpasskeyvault951753 --query value -o tsv)
             echo "::add-mask::$ADMIN_PASSWORD"
-            echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> $GITHUB_OUTPUTS
+            echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> $GITHUB_OUTPUT
 
     - name: Use retrieved secret
       run: echo "The secret is successfully retrieved!"
