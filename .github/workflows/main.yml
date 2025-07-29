@@ -21,3 +21,9 @@ jobs:
         template: ./main.bicep # Path to your Bicep file
         deploymentName: VM-Mntr-Bckp-${{ github.run_number }} 
         deploymentMode: Incremental
+        parameters: |
+          {
+            "adminPassword": {
+              "value": "${{ secrets.ADMIN_PASSWORD }}"
+            }
+          }
