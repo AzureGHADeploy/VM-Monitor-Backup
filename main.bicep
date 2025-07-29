@@ -12,6 +12,8 @@ param adminUsername string = 'azureuser'
 @secure()
 param adminPassword string
 
+param logAnalyticsWorkspaceName string = 'TestVMLAWS'
+param dataCollectionRulename string = 'TestVMDataCollectionRule'
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetName
@@ -124,5 +126,91 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
         }
       }
     ]
+  }
+}
+
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: logAnalyticsWorkspaceName
+  location: location
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+  }
+}
+
+resource dataCollectionRule 'Microsoft.Insights/dataCollectionRules@2022-06-01' = {
+  name: dataCollectionRulename
+  location: location
+  properties: {
+    dataSources: {
+      performanceCounters: [
+        {
+          streams: [
+            'Microsoft-InsightsMetrics'
+          ]
+          samplingFrequencyInSeconds: 60
+
+          counterSpecifiers: [
+            '\\vminsights\\detailedmetrics'
+          ]
+          name: 'VMInsightsDetailedMetrics'
+        }
+      ]
+      extensions: [
+        {
+          streams: [
+            'Microsoft-ServiceMap'
+          ]
+          extensionName: 'VMInsightsExtension'
+          extensionSettings:{}
+          name:'DependencyAgentExtension'
+        }
+      ]
+    }
+    destinations: {
+      logAnalytics: [
+        {
+          workspaceResourceId: logAnalyticsWorkspace.id
+          name: 'LogAnalyticsWorkspace'
+        }
+      ]
+    }
+    dataFlows: [
+      {
+        streams: [  
+          'Microsoft-InsightsMetrics'
+          'Microsoft-ServiceMap'
+        ]
+        destinations: [
+            'LogAnalyticsWorkspace'
+        ]
+      }
+    ]
+  }
+}
+
+resource LinuxAMAAgent 'microsoft.compute/virtualMachines/extensions@2024-07-01' = {
+  parent: virtualmachine
+  name: '${vmName}-LinuxAMAAgent'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Azure.Monitor'
+    type: 'AzureMonitorLinuxAgent'
+    typeHandlerVersion: '1.21'
+    autoUpgradeMinorVersion: true
+    settings: {
+    }
+  }
+}
+
+resource DCRAssociation 'Microsoft.Insights/dataCollectionRuleAssociations@2022-06-01' = {
+  scope: virtualmachine
+  name: 'assoc-${vmName}-${dataCollectionRulename}'
+  properties: {
+    description: 'Association of VM with VM Insights DCR'
+    dataCollectionRuleId: dataCollectionRule.id
   }
 }
