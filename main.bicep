@@ -14,6 +14,9 @@ param adminPassword string
 
 param logAnalyticsWorkspaceName string = 'TestVMLAWS'
 param dataCollectionRulename string = 'TestVMDataCollectionRule'
+param recoveryServicesVaultName string = 'TestVMRecoveryVault'
+
+var backupPolicyName = 'DefaultPolicy'
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetName
@@ -212,5 +215,25 @@ resource DCRAssociation 'Microsoft.Insights/dataCollectionRuleAssociations@2022-
   properties: {
     description: 'Association of VM with VM Insights DCR'
     dataCollectionRuleId: dataCollectionRule.id
+  }
+}
+
+resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2025-02-01' = {
+  name: recoveryServicesVaultName
+  location: location
+  properties: {}
+  sku: {
+      name: 'Standard'
+      tier: 'Standard'
+    }
+  }
+
+resource vaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2025-02-01' = {
+  name: 'Azure/protectionContainers/VMs/${vmName}'
+  location: location
+  properties: {
+    protectedItemType: 'Microsoft.Compute/virtualMachines'
+    sourceResourceId: virtualmachine.id
+    policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicyName}'
   }
 }
