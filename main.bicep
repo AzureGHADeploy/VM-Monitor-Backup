@@ -254,10 +254,10 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
     schedulePolicy: {
       schedulePolicyType: 'SimpleSchedulePolicyV2'
       scheduleRunFrequency: 'Daily'
-      dailySchedule: {
-        scheduleRunTimes: [
-          '22:00' // Alternative: Just the hour and minute
-        ]
+      hourlySchedule: {
+        interval: 4
+        scheduleWindowStartTime: '2023-02-06T23:00:00Z'
+        scheduleWindowDuration: 24
       }
     }
     retentionPolicy: {
