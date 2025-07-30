@@ -256,7 +256,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
       schedulePolicyType: 'SimpleSchedulePolicy'
       scheduleRunFrequency: 'Daily'
       scheduleRunTimes: [
-        '2025-07-30T22:00:00Z' // Example time: 10 PM UTC. Adjust as needed.
+        '2025-07-30T22:00:00.000Z' // Example time: 10 PM UTC. Adjust as needed.
       ]
     }
     retentionPolicy: {
