@@ -264,8 +264,6 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-
         durationType: 'Days'
       }
     }
-    // Optional: Tiering and daily/weekly/monthly/yearly retention
-    // Different tiers like Operational Tier, Vault-Standard, Vault-Archived
-    // tieringPolicy: { ... }
+    timeZone: 'UTC' // Adjust as needed
   }
 }
