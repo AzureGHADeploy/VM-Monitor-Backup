@@ -244,34 +244,30 @@ resource vaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.Rec
   }
 }
 
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-01' = {
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2023-02-01' = {
   parent: recoveryServicesVault
-  location: location
   name: backupPolicyName
   properties: {
-    backupManagementType: 'AzureIaasVM' // Required for Azure VM backup
-    policyType: 'V2' // Recommended for modern features
-    instantRpRetentionRangeInDays: 30
+    backupManagementType: 'AzureIaasVM'
     schedulePolicy: {
-      schedulePolicyType: 'SimpleSchedulePolicyV2'
+      schedulePolicyType: 'SimpleSchedulePolicy'
       scheduleRunFrequency: 'Daily'
-      dailySchedule: {
         scheduleRunTimes: [
-          '22:00:00Z' // Corrected: Just the time with UTC designator
+          '2023-05-19T23:30:00Z'
         ]
-      }
     }
     retentionPolicy: {
-      retentionPolicyType: 'SimpleRetentionPolicy'
-      retentionDuration: {
-        count: 7
-        durationType: 'Days'
+      retentionPolicyType: 'LongTermRetentionPolicy'
+      dailySchedule: {
+        retentionTimes: [
+          '2023-05-19T23:30:00Z'
+        ]
+        retentionDuration: {
+          count: 15
+          durationType: 'Days'
+        }
       }
     }
-    timeZone: 'UTC' // Adjust as needed
-    instantRPDetails: {
-      azureBackupRGNamePrefix: 'BackupRG'
-      azureBackupRGNameSuffix: '2025'
-    }
+    timeZone: 'W. Europe Standard Time'
   }
 }
