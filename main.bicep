@@ -248,15 +248,16 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
   parent: recoveryServicesVault
   name: backupPolicyName
   properties: {
-    backupManagementType: 'AzureIaasVM'
-    policyType: 'V2'
+    backupManagementType: 'AzureIaasVM' // Required for Azure VM backup
+    policyType: 'V2' // Recommended for modern features
     instantRPDetails: {}
+    instantRpRetentionRangeInDays: 30
     schedulePolicy: {
       schedulePolicyType: 'SimpleSchedulePolicyV2'
       scheduleRunFrequency: 'Daily'
       dailySchedule: {
         scheduleRunTimes: [
-          '2025-07-30T08:00:00Z'
+          '2025-07-30T23:30:00Z'
         ]
       }
     }
@@ -264,10 +265,10 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
       retentionPolicyType: 'LongTermRetentionPolicy'
       dailySchedule: {
         retentionTimes: [
-          '2025-07-30T08:00:00Z'
+          '2025-07-30T23:30:00Z'
         ]
         retentionDuration: {
-          count: 30
+          count: 15
           durationType: 'Days'
         }
       }
@@ -278,8 +279,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
         duration: 0
         durationType: 'Invalid'
       }
-    }
-    instantRpRetentionRangeInDays: 8
+    }    
     timeZone: 'UTC'
     protectedItemsCount: 0
   }
