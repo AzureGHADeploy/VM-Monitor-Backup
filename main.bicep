@@ -17,6 +17,10 @@ param dataCollectionRulename string = 'TestVMDataCollectionRule'
 param recoveryServicesVaultName string = 'TestVMRecoveryVault'
 
 var backupPolicyName = 'DefaultPolicy'
+var backupFabric = 'Azure'
+var protectionContainer = 'iaasvmcontainer;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
+var protectedItem = 'vm;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
+
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetName
@@ -231,7 +235,7 @@ resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2025-02-01' = 
   }
 
 resource vaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems@2025-02-01' = {
-  name: 'Azure/protectionContainers/VMs/${vmName}'
+  name: '${recoveryServicesVaultName}/${backupFabric}/${protectionContainer}/${protectedItem}'
   location: location
   properties: {
     protectedItemType: 'Microsoft.Compute/virtualMachines'
