@@ -250,6 +250,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-
   properties: {
     backupManagementType: 'AzureIaasVM' // Required for Azure VM backup
     policyType: 'V2' // Recommended for modern features
+    instantRpRetentionRangeInDays: 30
     schedulePolicy: {
       schedulePolicyType: 'SimpleSchedulePolicy'
       scheduleRunFrequency: 'Daily'
@@ -265,5 +266,9 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-
       }
     }
     timeZone: 'UTC' // Adjust as needed
+    instantRPDetails: {
+      azureBackupRGNamePrefix: 'BackupRG'
+      azureBackupRGNameSuffix: '2025'
+    }
   }
 }
