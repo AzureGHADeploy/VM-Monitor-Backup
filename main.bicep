@@ -221,9 +221,11 @@ resource DCRAssociation 'Microsoft.Insights/dataCollectionRuleAssociations@2022-
 resource recoveryServicesVault 'Microsoft.RecoveryServices/vaults@2025-02-01' = {
   name: recoveryServicesVaultName
   location: location
-  properties: {}
+  properties: {
+    publicNetworkAccess: 'Disabled'
+  }
   sku: {
-      name: 'Standard'
+      name: 'RS0'
       tier: 'Standard'
     }
   }
