@@ -16,7 +16,7 @@ param logAnalyticsWorkspaceName string = 'TestVMLAWS'
 param dataCollectionRulename string = 'TestVMDataCollectionRule'
 param recoveryServicesVaultName string = 'TestVMRecoveryVault'
 
-var backupPolicyName = 'DefaultPolicy'
+var backupPolicyName = 'DailyBackupPolicy'
 var backupFabric = 'Azure'
 var protectionContainer = 'iaasvmcontainer;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
 var protectedItem = 'vm;iaasvmcontainerv2;${resourceGroup().name};${vmName}'
@@ -241,5 +241,31 @@ resource vaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.Rec
     protectedItemType: 'Microsoft.Compute/virtualMachines'
     sourceResourceId: virtualmachine.id
     policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicyName}'
+  }
+}
+
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
+  parent: recoveryServicesVault
+  name: backupPolicyName
+  properties: {
+    backupManagementType: 'AzureIaasVM' // Required for Azure VM backup
+    policyType: 'V2' // Recommended for modern features
+    schedulePolicy: {
+      schedulePolicyType: 'SimpleSchedulePolicy'
+      scheduleRunFrequency: 'Daily'
+      scheduleRunTimes: [
+        '2025-07-30T22:00:00Z' // Example time: 10 PM UTC. Adjust as needed.
+      ]
+    }
+    retentionPolicy: {
+      retentionPolicyType: 'SimpleRetentionPolicy'
+      retentionDuration: {
+        count: 7
+        durationType: 'Days'
+      }
+    }
+    // Optional: Tiering and daily/weekly/monthly/yearly retention
+    // Different tiers like Operational Tier, Vault-Standard, Vault-Archived
+    // tieringPolicy: { ... }
   }
 }
