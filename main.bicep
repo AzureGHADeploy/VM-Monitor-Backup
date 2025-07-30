@@ -244,8 +244,9 @@ resource vaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.Rec
   }
 }
 
-resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2024-04-01' = {
+resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-01' = {
   parent: recoveryServicesVault
+  location: location
   name: backupPolicyName
   properties: {
     backupManagementType: 'AzureIaasVM' // Required for Azure VM backup
