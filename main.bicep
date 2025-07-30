@@ -253,11 +253,13 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
     policyType: 'V2' // Recommended for modern features
     instantRpRetentionRangeInDays: 30
     schedulePolicy: {
-      schedulePolicyType: 'SimpleSchedulePolicy'
+      schedulePolicyType: 'SimpleSchedulePolicyV2'
       scheduleRunFrequency: 'Daily'
-      scheduleRunTimes: [
-        '2025-07-30T22:00:00.000Z' // Example time: 10 PM UTC. Adjust as needed.
-      ]
+      dailySchedule: {
+        scheduleRunTimes: [
+          '2025-07-30T22:00:00Z' // Adjust the time as needed
+        ]
+      }
     }
     retentionPolicy: {
       retentionPolicyType: 'SimpleRetentionPolicy'
