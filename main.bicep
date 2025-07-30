@@ -257,7 +257,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
       scheduleRunFrequency: 'Daily'
       dailySchedule: {
         scheduleRunTimes: [
-          '2025-07-30T23:30:00Z'
+          '2025-07-30T08:00:00Z'
         ]
       }
     }
@@ -265,10 +265,10 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
       retentionPolicyType: 'LongTermRetentionPolicy'
       dailySchedule: {
         retentionTimes: [
-          '2025-07-30T23:30:00Z'
+          '2025-07-30T08:00:00Z'
         ]
         retentionDuration: {
-          count: 15
+          count: 30
           durationType: 'Days'
         }
       }
