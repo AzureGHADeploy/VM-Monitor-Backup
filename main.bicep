@@ -240,7 +240,7 @@ resource vaultName_backupFabric_protectionContainer_protectedItem 'Microsoft.Rec
   properties: {
     protectedItemType: 'Microsoft.Compute/virtualMachines'
     sourceResourceId: virtualmachine.id
-    policyId: '${recoveryServicesVault.id}/backupPolicies/${backupPolicyName}'
+    policyId: backupPolicy.id
   }
 }
 
