@@ -19,7 +19,7 @@ jobs:
       uses: azure/CLI@v1
       with:
           inlineScript: |
-            ADMIN_PASSWORD=$(az keyvault secret show --name VMPass --vault-name vmpasskeyvault951753 --query value -o tsv)
+            ADMIN_PASSWORD=$(az keyvault secret show --name VMPass --vault-name vmpasskeyvault9517532 --query value -o tsv)
             echo "::add-mask::$ADMIN_PASSWORD"
             echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> $GITHUB_OUTPUT
 
