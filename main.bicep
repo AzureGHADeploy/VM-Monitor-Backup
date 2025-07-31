@@ -53,9 +53,6 @@ param logAnalyticsRetentionInDays int = 30
 @description('The name of the backup policy for the VM.')
 param backupPolicyName string = '${vmName}-DailyBackupPolicy'
 
-@description('The daily schedule run time for the backup policy (e.g., 22:00:00Z for 10 PM UTC).')
-param backupScheduleRunTime string = '22:00:00Z'
-
 @description('The instant recovery point retention range in days.')
 @minValue(1)
 @maxValue(30)
@@ -335,7 +332,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
       scheduleRunFrequency: 'Daily'
       dailySchedule: {
         scheduleRunTimes: [
-          backupScheduleRunTime
+          '2025-07-31T22:00:00Z' 
         ]
       }
     }
@@ -343,7 +340,7 @@ resource backupPolicy 'Microsoft.RecoveryServices/vaults/backupPolicies@2025-02-
       retentionPolicyType: 'LongTermRetentionPolicy'
       dailySchedule: {
         retentionTimes: [
-          '2025-07-30T23:30:00Z'
+          '2025-07-31T22:00:00Z'
         ]
         retentionDuration: {
           count: dailyRetentionCount
